@@ -35,9 +35,10 @@ jobs:
               uses: php/php-windows-builder/extension@v1
               with:
                 php-version: ${{ matrix.php-version }}
-                arch: ${{ matrix.arch }}
+                arch: 'x64'
                 ts: ${{ matrix.ts }}
                 args: --with-xdebug
+                test-runner: run-xdebug-tests.php
                 libs: zlib
 
     release:
