@@ -383,8 +383,16 @@ static void xdebug_init_normal_debugger(xdebug_str *connection_attempts)
 		return;
 	}
 
-	xdebug_log(XLOG_CHAN_DEBUG, XLOG_INFO, "Checking remote connect back address.");
-	if (XINI_DBG(client_discovery_header) && XINI_DBG(client_discovery_header)[0]) {
+	xdebug_log(XLOG_CHAN_DEBUG, XLOG_INFO, "Checking remote connect back address from cookie.");
+	if (XINI_DBG(client_discovery_cookie) && XINI_DBG(client_discovery_cookie)[0]) {
+		header = XINI_DBG(client_discovery_cookie);
+		xdebug_log(XLOG_CHAN_DEBUG, XLOG_INFO, "Checking user configured cookie '%s'.", XINI_DBG(client_discovery_cookie));
+
+		remote_addr = zend_hash_str_find(Z_ARRVAL(PG(http_globals)[TRACK_VARS_COOKIE]), XINI_DBG(client_discovery_cookie), HASH_KEY_STRLEN(XINI_DBG(client_discovery_cookie)));
+	}
+
+	xdebug_log(XLOG_CHAN_DEBUG, XLOG_INFO, "Checking remote connect back address from header.");
+	if (!remote_addr && XINI_DBG(client_discovery_header) && XINI_DBG(client_discovery_header)[0]) {
 		header = XINI_DBG(client_discovery_header);
 		xdebug_log(XLOG_CHAN_DEBUG, XLOG_INFO, "Checking user configured header '%s'.", XINI_DBG(client_discovery_header));
 
